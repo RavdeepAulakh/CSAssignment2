@@ -35,12 +35,18 @@ public class UploadServlet extends HttpServlet{
 
     }
 
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-
+        // Get the OutputStream for writing the response
         PrintWriter out = new PrintWriter(response.getOutputStream(), true);
 
-        // Write the HTML form for file upload
+        // Write the HTTP status line and headers
+        out.println("HTTP/1.1 200 OK");
+        out.println("Content-Type: text/html");
+        out.println();  // An empty line to separate headers and content
+
+        // Write the HTML content
         out.println("<html>");
         out.println("<head><title>File Upload Form</title></head>");
         out.println("<body>");
@@ -52,7 +58,6 @@ public class UploadServlet extends HttpServlet{
         out.println("</form>");
         out.println("</body>");
         out.println("</html>");
-
-        out.close(); // Close the PrintWriter
     }
+
 }
