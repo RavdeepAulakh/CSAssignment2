@@ -34,4 +34,25 @@ public class UploadServlet extends HttpServlet{
         }
 
     }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+
+        PrintWriter out = new PrintWriter(response.getOutputStream(), true);
+        response.setContentType("text/html");
+        // Write the HTML form for file upload
+        out.println("<html>");
+        out.println("<head><title>File Upload Form</title></head>");
+        out.println("<body>");
+        out.println("<h1>File Upload Form</h1>");
+        out.println("<form action='' method='post' enctype='multipart/form-data'>");
+        out.println("<label for='file'>Select a file:</label>");
+        out.println("<input type='file' name='file' id='file'><br>");
+        out.println("<input type='submit' value='Upload'>");
+        out.println("</form>");
+        out.println("</body>");
+        out.println("</html>");
+
+        out.close(); // Close the PrintWriter
+    }
 }
