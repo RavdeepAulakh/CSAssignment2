@@ -39,7 +39,7 @@ public class UploadServlet extends HttpServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         PrintWriter out = new PrintWriter(response.getOutputStream(), true);
-        response.setContentType("text/html");
+
         // Write the HTML form for file upload
         out.println("<html>");
         out.println("<head><title>File Upload Form</title></head>");
