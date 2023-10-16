@@ -1,4 +1,9 @@
+import jakarta.servlet.http.Part;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class HttpServletRequest {
     private InputStream inputStream = null;
@@ -6,4 +11,6 @@ public class HttpServletRequest {
         this.inputStream = inputStream;
     }
     public InputStream getInputStream() {return inputStream;}
+
+
 }

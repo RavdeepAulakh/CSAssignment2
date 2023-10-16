@@ -1,6 +1,11 @@
+import jakarta.servlet.http.Part;
+
 import java.io.*;
 import java.io.InputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.time.Clock;
+import java.util.Scanner;
 
 public class UploadServlet extends HttpServlet{
     public UploadServlet() {
@@ -8,42 +13,32 @@ public class UploadServlet extends HttpServlet{
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        // Get the InputStream from the HttpServletRequest object
+        InputStream inputStream = request.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        // Print the HTTP message to the console
         try {
-            InputStream in = request.getInputStream();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] content = new byte[1];
-            int bytesRead = -1;
-            while( ( bytesRead = in.read( content ) ) != -1 ) {
-                baos.write( content, 0, bytesRead );
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
             }
-            Clock clock = Clock.systemDefaultZone();
-            long milliSeconds=clock.millis();
-            OutputStream outputStream = new FileOutputStream(new File(String.valueOf(milliSeconds) + ".png"));
-            baos.writeTo(outputStream);
-            outputStream.close();
-            PrintWriter out = new PrintWriter(response.getOutputStream(), true);
-            File dir = new File(".");
-            String[] chld = dir.list();
-            for(int i = 0; i < chld.length; i++){
-                String fileName = chld[i];
-                out.println(fileName+"\n");
-                System.out.println(fileName);
-            }
-        } catch(Exception ex) {
-            System.err.println(ex);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
 
 
-    @Override
+        @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         // Get the OutputStream for writing the response
         PrintWriter out = new PrintWriter(response.getOutputStream(), true);
 
         // Write the HTTP status line and headers
-        out.println("HTTP/1.1 200 OK");
+        out.println("GET HTTP/1.1 200 OK");
         out.println("Content-Type: text/html");
+        out.println("Charset=UTF-8");
         out.println();  // An empty line to separate headers and content
 
         // Write the HTML content
@@ -51,7 +46,7 @@ public class UploadServlet extends HttpServlet{
         out.println("<head><title>File Upload Form</title></head>");
         out.println("<body>");
         out.println("<h1>File Upload Form</h1>");
-        out.println("<form action='POST' method='' enctype='multipart/form-data'>");
+        out.println("<form action='/upload' method='post' enctype='multipart/form-data'>'>");
         out.println("<label for='file'>Select a file:</label>");
         out.println("<input type='file' name='file' id='file'><br>");
         out.println("<label for='caption'>Caption:</label>");

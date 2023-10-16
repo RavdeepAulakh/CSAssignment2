@@ -16,25 +16,24 @@ public class UploadServerThread extends Thread{
 
             //read the first line of http request
             String requestLine = reader.readLine();
-//            System.out.println("Request Line: " + requestLine);
+
             HttpServletRequest req = new HttpServletRequest(bufferedInput);
 
             OutputStream baos = new ByteArrayOutputStream();
             HttpServletResponse res = new HttpServletResponse(baos);
 
+            String[] requestParts = requestLine.split(" ");
+            String method = requestParts[0];
+            String urlPath = requestParts[1];
 
             HttpServlet httpServlet = new UploadServlet();
 
-            if(requestLine.contains("GET")) {
-                if(requestLine.charAt(4) == '/'){
-                    httpServlet.doGet(req, res);
-                }
+            if ("GET".equals(method) && "/".equals(urlPath)) {
+                httpServlet.doGet(req, res);
             }
 
-            if(requestLine.contains("POST")) {
-                if(requestLine.charAt(4) == '/'){
-                    httpServlet.doPost(req, res);
-                }
+            if ("POST".equals(method) && "/upload".equals(urlPath)) {
+                httpServlet.doPost(req, res);
             }
 
             OutputStream out = socket.getOutputStream();
