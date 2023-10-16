@@ -30,6 +30,7 @@ public class UploadServerThread extends Thread{
                     httpServlet.doGet(req, res);
                 }
             }
+
             if(requestLine.contains("POST")) {
                 if(requestLine.charAt(4) == '/'){
                     httpServlet.doPost(req, res);

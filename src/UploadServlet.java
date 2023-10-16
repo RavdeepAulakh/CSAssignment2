@@ -51,13 +51,18 @@ public class UploadServlet extends HttpServlet{
         out.println("<head><title>File Upload Form</title></head>");
         out.println("<body>");
         out.println("<h1>File Upload Form</h1>");
-        out.println("<form action='' method='post' enctype='multipart/form-data'>");
+        out.println("<form action='POST' method='' enctype='multipart/form-data'>");
         out.println("<label for='file'>Select a file:</label>");
         out.println("<input type='file' name='file' id='file'><br>");
+        out.println("<label for='caption'>Caption:</label>");
+        out.println("<input type='text' name='caption' id='caption'><br>");
+        out.println("<label for='date'>Date:</label>");
+        out.println("<input type='date' name='date' id='date'><br>");
         out.println("<input type='submit' value='Upload'>");
         out.println("</form>");
         out.println("</body>");
         out.println("</html>");
+
     }
 
 }
