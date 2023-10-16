@@ -5,8 +5,11 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.time.Clock;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-
+import java.util.regex.*;
 public class UploadServlet extends HttpServlet{
     public UploadServlet() {
 
@@ -15,19 +18,66 @@ public class UploadServlet extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         // Get the InputStream from the HttpServletRequest object
         InputStream inputStream = request.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        // Print the HTTP message to the console
-        try {
+        // Convert InputStream to a string for parsing
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                sb.append(line).append("\r\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        // Split multipart form data into parts
+        String[] parts = sb.toString().split("--"); // Split by boundary, no specific boundary needed
+
+        Map<String, String> formFields = new HashMap<>();
+        String filename = null;
+        byte[] fileData = null;
+
+        for (String part : parts) {
+            if (part.contains("Content-Disposition: form-data; name=\"caption\"")) {
+                String caption = part.split("\r\n\r\n")[1].trim();
+                formFields.put("caption", caption);
+            } else if (part.contains("Content-Disposition: form-data; name=\"date\"")) {
+                String date = part.split("\r\n\r\n")[1].trim();
+                formFields.put("date", date);
+            } else if (part.contains("Content-Disposition: form-data; name=\"file\"; filename=\"")) {
+                // Extract the file name
+                filename = part.split("filename=\"")[1].split("\"")[0];
+
+                // Extract file data
+                int dataStart = part.indexOf("\r\n\r\n") + 4;
+                byte[] partBytes = part.substring(dataStart).getBytes();
+                // Concatenate the part bytes
+                if (fileData == null) {
+                    fileData = partBytes;
+                } else {
+                    byte[] combined = new byte[fileData.length + partBytes.length];
+                    System.arraycopy(fileData, 0, combined, 0, fileData.length);
+                    System.arraycopy(partBytes, 0, combined, fileData.length, partBytes.length);
+                    fileData = combined;
+                }
+            }
+        }
+
+        filename = formFields.get("caption") + "_" + formFields.get("date") + "_" + filename;
+        System.out.println(filename);
+
+        // Write to the specified folder
+        String directoryPath = "C:\\Users\\bardi\\Documents\\CST_Sem3\\COMP3940 (cs)\\A1";
+        String filePath = directoryPath + File.separator + filename;
+
+        // Write the file data to the specified file
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(fileData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
 
         @Override
@@ -59,5 +109,6 @@ public class UploadServlet extends HttpServlet{
         out.println("</html>");
 
     }
+
 
 }
