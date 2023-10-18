@@ -21,10 +21,11 @@ public class UploadServlet extends HttpServlet {
         try {
             // Use a ByteArrayOutputStream to capture the entire POST body as bytes
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4000];
             int bytesRead;
             while ((bytesRead = request.getInputStream().read(buffer)) != -1) {
                 baos.write(buffer, 0, bytesRead);
+                break;
             }
             byte[] inputData = baos.toByteArray();
 
