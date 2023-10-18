@@ -21,7 +21,7 @@ public class UploadServlet extends HttpServlet {
         try {
             // Use a ByteArrayOutputStream to capture the entire POST body as bytes
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buffer = new byte[4000];
+            byte[] buffer = new byte[10000000];
             int bytesRead;
             while ((bytesRead = request.getInputStream().read(buffer)) != -1) {
                 baos.write(buffer, 0, bytesRead);
@@ -35,7 +35,7 @@ public class UploadServlet extends HttpServlet {
             // Split multipart form data into parts using a basic split (this might still be problematic, see earlier explanation)
             String[] parts = dataStr.split("--");
 
-                                      Map<String, String> formFields = new HashMap<>();
+            Map<String, String> formFields = new HashMap<>();
             String filename = null;
             byte[] fileData = null;
 
