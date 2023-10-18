@@ -11,13 +11,13 @@ import java.util.Scanner;
 import java.util.regex.*;
 public class UploadServlet extends HttpServlet {
 
-    private String directoryPath = "/Users/laurieannesolkoski/IdeaProjects/CSAssignment2/images";
+    private String directoryPath = "C:\\Users\\bardi\\Documents\\CST_Sem3\\COMP3940 (cs)\\A1\\images";
 
     public UploadServlet() {
 
     }
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             // Use a ByteArrayOutputStream to capture the entire POST body as bytes
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -65,7 +65,7 @@ public class UploadServlet extends HttpServlet {
             System.out.println(filename);
 
             // Write to the specified folder
-            String directoryPath = "C:\\Users\\bardi\\Documents\\CST_Sem3\\COMP3940 (cs)\\A1";
+            String directoryPath = "C:\\Users\\bardi\\Documents\\CST_Sem3\\COMP3940 (cs)\\A1\\images";
             String filePath = directoryPath + File.separator + filename;
 
             // Write the file data to the specified file
@@ -87,13 +87,13 @@ public class UploadServlet extends HttpServlet {
         // Get the OutputStream for writing the response
         PrintWriter out = new PrintWriter(response.getOutputStream(), true);
 
-        // Write the HTTP status line and headers
+// Write the HTTP status line and headers
         out.println("HTTP/1.1 200 OK");
         out.println("Content-Type: text/html");
         out.println("Charset=UTF-8");
         out.println();  // An empty line to separate headers and content
 
-        // Write the HTML content
+// Write the HTML content
         out.println("<html>");
         out.println("<head><title>File Upload Form</title></head>");
         out.println("<body>");
@@ -105,11 +105,10 @@ public class UploadServlet extends HttpServlet {
         out.println("<input type='text' name='caption' id='caption'><br>");
         out.println("<label for='date'>Date:</label>");
         out.println("<input type='date' name='date' id='date'><br>");
-        out.println("<input type='submit' value='Upload'>");
+        out.println("<input type='submit' value='Upload' id='uploadButton'>");
         out.println("</form>");
         out.println("</body>");
         out.println("</html>");
-
     }
 
 

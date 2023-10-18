@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
@@ -16,7 +17,8 @@ public class UploadServerThread extends Thread {
 
             // Use BufferedInputStream directly
             BufferedInputStream bufferedInput = new BufferedInputStream(in);
-          
+            BufferedReader reader = new BufferedReader(new InputStreamReader(bufferedInput));
+
             // Read the first line of the HTTP request
             String requestLine = reader.readLine();
 
