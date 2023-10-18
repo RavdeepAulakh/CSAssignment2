@@ -14,12 +14,13 @@ public class UploadServerThread extends Thread {
         try {
             InputStream in = socket.getInputStream();
 
+            // Use BufferedInputStream directly
             BufferedInputStream bufferedInput = new BufferedInputStream(in);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(bufferedInput));
-
+          
             // Read the first line of the HTTP request
             String requestLine = reader.readLine();
 
+            // Pass the BufferedInputStream directly to HttpServletRequest
             HttpServletRequest req = new HttpServletRequest(bufferedInput);
             OutputStream baos = new ByteArrayOutputStream();
             HttpServletResponse res = new HttpServletResponse(baos);

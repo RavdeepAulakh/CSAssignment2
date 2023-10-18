@@ -1,5 +1,3 @@
-
-
 import java.io.*;
 import java.io.InputStream;
 import java.net.Socket;
@@ -11,7 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.*;
-public class UploadServlet extends HttpServlet{
+public class UploadServlet extends HttpServlet {
+
+    private String directoryPath = "/Users/laurieannesolkoski/IdeaProjects/CSAssignment2/images";
+
     public UploadServlet() {
 
     }
@@ -77,10 +78,9 @@ public class UploadServlet extends HttpServlet{
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        displayDirectoryListing(response);
     }
-
-
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -88,7 +88,7 @@ public class UploadServlet extends HttpServlet{
         PrintWriter out = new PrintWriter(response.getOutputStream(), true);
 
         // Write the HTTP status line and headers
-        out.println("GET HTTP/1.1 200 OK");
+        out.println("HTTP/1.1 200 OK");
         out.println("Content-Type: text/html");
         out.println("Charset=UTF-8");
         out.println();  // An empty line to separate headers and content
@@ -98,7 +98,7 @@ public class UploadServlet extends HttpServlet{
         out.println("<head><title>File Upload Form</title></head>");
         out.println("<body>");
         out.println("<h1>File Upload Form</h1>");
-        out.println("<form action='/upload' method='post' enctype='multipart/form-data'>'>");
+        out.println("<form action='/upload' method='post' enctype='multipart/form-data'>");
         out.println("<label for='file'>Select a file:</label>");
         out.println("<input type='file' name='file' id='file'><br>");
         out.println("<label for='caption'>Caption:</label>");
@@ -113,4 +113,39 @@ public class UploadServlet extends HttpServlet{
     }
 
 
+    private void displayDirectoryListing(HttpServletResponse response) throws IOException {
+        PrintWriter out = new PrintWriter(response.getOutputStream(), true);
+
+        File directory = new File(directoryPath);
+        String[] files = directory.list();
+
+        // Sort files alphabetically
+        Arrays.sort(files);
+
+        // Print to console
+        System.out.println("Files in Directory:");
+        for (String filename : files) {
+            System.out.println(filename);
+        }
+
+
+        // Set the content type and character encoding, although these might be placeholders for now
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+
+        out.println("<html>");
+        out.println("<head><title>Files List</title></head>");
+        out.println("<body>");
+        out.println("<h1>Files in Directory</h1>");
+        out.println("<ul>");
+
+        for (String filename : files) {
+            out.println("<li>" + filename + "</li>");
+        }
+
+        out.println("</ul>");
+        out.println("</body>");
+        out.println("</html>");
+        out.flush();
+    }
 }
