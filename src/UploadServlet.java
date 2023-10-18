@@ -67,7 +67,7 @@ public class UploadServlet extends HttpServlet{
         System.out.println(filename);
 
         // Write to the specified folder
-        String directoryPath = "MacOS" + File.separator + "Users" + File.separator + "ravdeepaulakh" + File.separator + "Documents" + File.separator + "images";
+        String directoryPath = File.separator + "Users" + File.separator + "ravdeepaulakh" + File.separator + "Documents" + File.separator + "images";
         String filePath = directoryPath + File.separator + filename;
 
         // Write the file data to the specified file
