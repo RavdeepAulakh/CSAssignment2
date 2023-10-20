@@ -1,17 +1,11 @@
 import java.io.*;
-import java.io.InputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.time.Clock;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.regex.*;
 public class UploadServlet extends HttpServlet {
 
-    private String directoryPath = "C:\\Users\\bardi\\Documents\\CST_Sem3\\COMP3940 (cs)\\A1\\images";
+    private String directoryPath = "/Users/laurieannesolkoski/IdeaProjects/CSAssignment2/images";
 
     public UploadServlet() {
 
@@ -66,7 +60,7 @@ public class UploadServlet extends HttpServlet {
             System.out.println(filename);
 
             // Write to the specified folder
-            String directoryPath = "C:\\Users\\bardi\\Documents\\CST_Sem3\\COMP3940 (cs)\\A1\\images";
+            String directoryPath = "/Users/laurieannesolkoski/IdeaProjects/CSAssignment2/images";
             String filePath = directoryPath + File.separator + filename;
 
             // Write the file data to the specified file
@@ -80,7 +74,7 @@ public class UploadServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        displayDirectoryListing(response);
+         displayDirectoryListing(response);
     }
 
     @Override
@@ -88,18 +82,18 @@ public class UploadServlet extends HttpServlet {
         // Get the OutputStream for writing the response
         PrintWriter out = new PrintWriter(response.getOutputStream(), true);
 
-// Write the HTTP status line and headers
+        // Write the HTTP status line and headers
         out.println("HTTP/1.1 200 OK");
         out.println("Content-Type: text/html");
         out.println("Charset=UTF-8");
         out.println();  // An empty line to separate headers and content
 
-// Write the HTML content
+        // Write the HTML content
         out.println("<html>");
         out.println("<head><title>File Upload Form</title></head>");
         out.println("<body>");
         out.println("<h1>File Upload Form</h1>");
-        out.println("<form action='/upload' method='post' enctype='multipart/form-data'>");
+        out.println("<form action='/upload' method='post' enctype='multipart/form-data' id='uploadForm'>");
         out.println("<label for='file'>Select a file:</label>");
         out.println("<input type='file' name='file' id='file'><br>");
         out.println("<label for='caption'>Caption:</label>");
@@ -110,11 +104,20 @@ public class UploadServlet extends HttpServlet {
         out.println("</form>");
         out.println("</body>");
         out.println("</html>");
+
     }
 
 
+
     private void displayDirectoryListing(HttpServletResponse response) throws IOException {
+
         PrintWriter out = new PrintWriter(response.getOutputStream(), true);
+
+        // this has to match the HTTP status line and headers as it is in doGet
+        out.println("HTTP/1.1 200 OK");
+        out.println("Content-Type: text/html");
+        out.println("Charset=UTF-8");
+        out.println();
 
         File directory = new File(directoryPath);
         String[] files = directory.list();
@@ -128,10 +131,6 @@ public class UploadServlet extends HttpServlet {
             System.out.println(filename);
         }
 
-
-        // Set the content type and character encoding, although these might be placeholders for now
-        response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
 
         out.println("<html>");
         out.println("<head><title>Files List</title></head>");
