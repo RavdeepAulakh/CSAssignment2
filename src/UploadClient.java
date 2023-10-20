@@ -25,7 +25,6 @@ public class UploadClient {
             // Send the headers and the message
             out.write(httpHeaders.getBytes());
             out.write(message.getBytes());
-
             socket.shutdownOutput();
 
             String filename;
